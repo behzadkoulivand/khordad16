@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1, shrink-to-fit=no"
+        />
+        <link rel="shortcut icon" href="../images/icons8-videocall-64.png" type="image/x-icon">
+        <link rel="stylesheet" href="../css/bootstrap-rtl.css" />
+        <link rel="stylesheet" href="../css/font-awesome.css" />
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <title>دیدار | داشبورد مدیریت</title>
+        <style>
+            .bd-placeholder-img {
+                font-size: 1.125rem;
+                text-anchor: middle;
+                -webkit-user-select: none;
+                -moz-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
+            }
+
+            @media (min-width: 768px) {
+                .bd-placeholder-img-lg {
+                    font-size: 3.5rem;
+                }
+            }
+        </style>
+        <link href="../css/dashboard.css" rel="stylesheet" />
+        <link rel="stylesheet" href="../css/styles.css" />
+    </head>
+    <body class="rtl">
+        <nav
+            class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow"
+        >
+            <a id="hello" class="navbar-brand col-md-3 col-lg-2 mr-0 px-3" href="#"
+                ></a
+            >
+            <button
+                class="navbar-toggler position-absolute d-md-none collapsed"
+                type="button"
+                data-toggle="collapse"
+                data-target="#sidebarMenu"
+                aria-controls="sidebarMenu"
+                aria-expanded="false"
+                aria-label="Toggle navigation"
+            >
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <input
+                class="form-control form-control-dark w-100"
+                type="text"
+                placeholder="جستجو"
+                aria-label="Search"
+            />
+            <ul class="navbar-nav px-3">
+                <li class="nav-item text-nowrap">
+                    <a class="nav-link" href="/">خروج</a>
+                </li>
+            </ul>
+        </nav>
+        <div class="container-fluid">
+            <div class="row">
+                <nav
+    id="sidebarMenu"
+    class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse"
+>
+    <div class="sidebar-sticky pt-3">
+        <ul class="nav flex-column">
+            <li class="nav-item mb-2">
+                <a
+                    class="nav-link d-flex align-items-center btn btn-outline-secondary active"
+                    href="/dashboard"
+                    >
+                        <span class="fa fa-home mr-3"></span>
+                        داشبورد
+                    </a
+                >
+            </li>
+            <% if(pathh == "admin") {%>
+            <li class="nav-item mb-2">
+                <a
+                    class="nav-link d-flex align-items-center btn btn-outline-secondary "
+                    href="/users/register"
+                    >
+                        <span class="fa fa-plus mr-3"></span>
+                        ساخت کاربر جدید
+                    </a
+                >
+            </li>
+            <% } %>
+            <% if(pathh == "supervisor") {%>
+            <li class="nav-item mb-2">
+                <a
+                    class="nav-link d-flex align-items-center btn btn-outline-secondary "
+                    href="/dashboard/add-didar"
+                    >
+                        <span class="fa fa-plus mr-3"></span>
+                        ساخت جلسه جدید
+                    </a
+                >
+            </li>
+            <% } %>
+            <% if(pathh == "admin") {%>
+            <li class="nav-item mb-2">
+                <a
+                    class="nav-link d-flex align-items-center btn btn-outline-secondary "
+                    href="/chart"
+                    >
+                        <span class="fa fa-plus mr-3"></span>
+                        چارت سازمانی
+                    </a
+                >
+            </li>
+            <% } %>
+        </ul>
+
+        <h6
+            class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted"
+        >
+            <span>جدا کننده</span>
+            <a
+                class="d-flex align-items-center text-muted"
+                href="#"
+                aria-label="Add a new report"
+            >
+                <span class="fa fa-plus"></span>
+            </a>
+        </h6>
+        <ul class="nav flex-column mb-2">
+            <li class="nav-item">
+                <a class="nav-link" href="#">تنظیمات</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+                <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+                    <% if (didar.length > 0) { %>
+                        <h2 class="mt-2">آخرین جلسه ها</h2>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>عنوان</th>
+                                        <th>دعوت کننده</th>
+                                        <th>تاریخ</th>
+                                        <th>ساعت</th>
+                                        <th>دعوت شدگان</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% for(let i = 0; i< didar.length; i++) {%>
+
+                                        <% let onTimeDidar = false %>
+                                            <% let d = new Date() %>
+                                            <!-- Date -->
+                                            <% var dateNow = formatDate(d) %>
+                                            <% var didarDateArr = didar[i].date.split('/') %>
+                                            <% var ENgDidarDateArr = [] %>
+                                            <% for(let i = 0; i < didarDateArr.length; i++) {%>
+                                                <% ENgDidarDateArr.push(convertDigitsFAtoEN(didarDateArr[i])) %>
+                                            <% } %>
+                                            <% var dateNowArr = dateNow.split(' ') %>
+                                            <!-- Time -->
+                                            <% var didarTimeArr = didar[i].time.split(':') %>
+
+                                            <% if(parseInt(dateNowArr[0]) > parseInt(ENgDidarDateArr[0])) {%>
+                                                <% onTimeDidar = true %>
+                                            <% } else if(parseInt(dateNowArr[0]) == parseInt(ENgDidarDateArr[0])) {%>
+                                                <% if(parseInt(dateNowArr[1]) > parseInt(ENgDidarDateArr[1])) {%>
+                                                    <% onTimeDidar = true %>
+                                                <% } else if(parseInt(dateNowArr[1]) == parseInt(ENgDidarDateArr[1])) {%>
+                                                    <% if(parseInt(dateNowArr[2]) > parseInt(ENgDidarDateArr[2])) {%>
+                                                        <% onTimeDidar = true %>
+                                                    <% } else if(parseInt(dateNowArr[2]) == parseInt(ENgDidarDateArr[2])) {%>
+                                                        <% if(d.getHours() > parseInt(didarTimeArr[0])) {%>
+                                                            <% onTimeDidar = true %>
+                                                        <% } else if(d.getHours() == parseInt(didarTimeArr[0])) {%>
+                                                            <% if(d.getMinutes() >= parseInt(didarTimeArr[1])) {%>
+                                                                <% onTimeDidar = true %>
+                                                            <% } %>
+                                                        <% } %>
+                                                <% } %>
+                                            <% } %>
+                                            <% } %>
+
+                                    <tr>
+                                        <td><%= i+1 %></td>
+                                        <% if(onTimeDidar) {%>
+                                            <td><a href="/join/<%= didar[i].presenter %>-<%= didar[i]._id %>"><%= didar[i].name %></a></td>
+                                        <% } else {%>
+                                            <td onclick="xplain()"><%= didar[i].name %></td>
+                                        <% } %>
+                                        <td><%= didar[i].presenter %></td>
+                                        <td><%= didar[i].date %></td>
+                                        <td><%= didar[i].time %></td>
+                                        <td>
+                                            <select>
+                                                <% for(let j = 0; j< didar[i].invited.length; j++) {%>
+                                                    <option ><%= didar[i].invited[j] %></option>
+                                                <% } %>
+                                            </select> 
+                                        </td>    
+                                        <!-- <td>
+                                            <a href="/" class="btn btn-sm btn-primary">ویرایش</a>
+                                        </td> -->
+                                        
+                                        <td>
+                                            <a href="/deleteDidar/<%= didar[i]._id %>" class="btn btn-sm btn-danger">حذف</a>
+                                        </td>
+                                    </tr>
+                                    
+                                    <% } %>
+                                </tbody>
+                            </table>
+                            
+                        </div>
+                    <% } else{ %>
+                                <h2>هیچ جلسه ای ندارید</h2>
+                        <% } %>
+                        
+                        <!-- <div class="text-center">
+                            <h3 class="mt-2">
+                                در حال حاضر هیچ پستی توسط شما در پایگاه داده ثبت نشده است
+                            </h3>
+                        </div> -->
+                        
+                        
+                </main>
+            </div>
+        </div>
+        
+        <!-- <script src="../js/upload.js"></script> -->
+        <script>
+            document.getElementById("hello").textContent = "سلام" + " " + window.sessionStorage.fullname;
+        </script>
+        <script>
+            function xplain(){
+                alert("هنوز زمان جلسه نرسیده است")
+            }
+        </script>
+        <!-- <script>
+            
+
+            // for(let i=1; i < didar.length; i++){
+            //     document.getElementById("tr2").innerHTML = `<td>${i}</td>
+            //                             <td><a href='/'>${didar[i].name}</a></td>
+            //                             <td>${didar[i].presenter}</td>
+            //                             <td>${didar[i].date}</td>
+            //                             <td>${didar[i].time}</td>
+            //                             <td>${didar[i].ivited}</td>
+            //                             <td>
+            //                                 <a href="/" class="btn btn-sm btn-primary">ویرایش</a>
+            //                             </td>
+            //                             <td>
+            //                                 <a href="/" class="btn btn-sm btn-danger">حذف</a>
+            //                             </td> `
+            // }
+
+        </script> -->
+        <script src="../js/jquery.slim.min.js"></script>
+        <script src="../js/bootstrap.bundle.min.js"></script>
+    </body>
+</html>

@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en" >
+
+<head>
+  <meta charset="UTF-8">
+  
+  <link rel="shortcut icon" href="../images/icons8-videocall-64.png" type="image/x-icon">
+  <!-- <link rel="apple-touch-icon" href="../images/icons8-videocall-64.png" /> -->
+
+
+  
+  <script src="https://cpwebassets.codepen.io/assets/common/stopExecutionOnTimeout-2c7831bb44f98c1391d6a4ffda0e1fd302503391ca806e7fcc7b9b87197aec26.js"></script>
+
+
+  <title>دیدار | چارت سازمانی</title>
+
+    <link rel="canonical" href="https://codepen.io/hari2609/pen/BRprrm">
+  
+  
+  
+  
+    <link rel="stylesheet" href="../css/chart.css">
+
+  <script>
+    window.console = window.console || function(t) {};
+  </script>
+
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  
+</head>
+
+<body>
+  <h3 align="center">چارت سازمانی <br> <a href="/dashboard">بازگشت</a></h3>
+    <div id="orgChartContainer">
+      <div id="orgChart"></div>
+    </div>
+      
+    
+    
+  <script src='https://code.jquery.com/jquery-1.11.1.min.js'></script>
+      
+  <script id="rendered-js" src="../js/chart.js"></script>
+  <script>
+    var aaa = [];
+    `<% for(let i = 0; i < chartData.length; i++){%>`
+        var id, name, title, parent;
+        id = `<%- chartData[i].id %>`;
+        name = `<%- chartData[i].name %>`;
+        title = `<%- chartData[i].title %>`;
+        parent = `<%- chartData[i].parent %>`;
+        var bb = {id: parseInt(id), name: name, title: title, parent: parseInt(parent)};
+        aaa.push(bb);
+      `<% } %>`
+    dataChart(aaa);
+  </script>
+
+  
+</body>
+
+</html>

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="shortcut icon" href="../images/icons8-videocall-64.png" type="image/x-icon" />
+        <link rel="stylesheet" href="../css/styles.css" />
+        <link rel="stylesheet" href="../css/bootstrap-rtl.css" />
+        <link rel="stylesheet" href="../css/font-awesome.css" />
+        <link rel="stylesheet" href="../css/signin.css" />
+
+
+        <script async src="../js/Umami.js"></script>
+        <script src="https://unpkg.com/animejs@3.0.1/lib/anime.min.js"></script>
+        <script src="https://unpkg.com/scrollreveal@4.0.0/dist/scrollreveal.min.js"></script>
+
+        <script src="https://cdn.jsdelivr.net/npm/xss/dist/xss.min.js"></script>
+
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <title>دیدار | ثبت چارت سازمانی جدید </title>
+    </head>
+    <body class="rtl">
+        <div class="form-signin">
+            <h1 class="h3 mb-3 font-weight-normal">ثبت چارت سازمانی جدید</h1>
+            <!-- <div class="form-group">
+                <label for="orgCode">کد و جایگاه سازمانی؟</label>
+                <select name="orgCode" class="form-control" id="orgCode">
+                    <option value= "111">111 - نیرو زمینی</option>
+                    <option value= "112">112 - نیرو هوایی</option>
+                    <option value= "113">113 - نیرو دریایی</option>
+                    <option value= "114">114 - ساحفاجا</option>
+                    <option value= "115">115 - عقیدتی سیاسی</option>
+                    <option value= "1141">1141 - معاونت فنی(ساحفاجا)</option>
+                </select>
+            </div> -->
+            
+            <label for="fullname" class="sr-only">نام سازمانی</label>
+            <input
+                id="fullname"
+                type="fullname"
+                name="fullname"
+                class="form-control mb-2"
+                placeholder="نام سازمانی"
+                autofocus
+            />
+            <label for="code" class="sr-only">کد سازمانی</label>
+            <input
+                id="code"
+                type="text"
+                name="code"
+                class="form-control mb-2"
+                placeholder="کد سازمانی"
+                
+            />
+            
+            <button id="regButton" class="btn btn-lg btn-primary btn-block" type="submit">
+                ثبت سازمان
+            </button>
+        </div>
+        <script>
+            
+            const orgCodeInput = document.getElementById('code');
+            const fullnameInput = document.getElementById('fullname');
+            const regBtn = document.getElementById('regButton');
+
+            orgCodeInput.onkeyup = (e) => {
+                if (e.keyCode === 13) {
+                    e.preventDefault();
+                    register();
+                }
+            };
+
+            fullnameInput.onkeyup = (e) => {
+                if (e.keyCode === 13) {
+                    e.preventDefault();
+                    register();
+                }
+            };
+            regBtn.onclick = (e) => {
+                register();
+            };
+
+            function register() {
+                const organization_code = filterXSS(document.getElementById('code').value);
+                const fullname = filterXSS(document.getElementById('fullname').value);
+                
+
+                if (organization_code && fullname ) {
+                    
+                    axios
+                        .post('/dashboard/add-chart', {
+                            title: organization_code,
+                            name: fullname,
+                            parent: window.sessionStorage.nodeID
+                        })
+                        .then(function (response) {
+
+                            return (window.location.href = '/chart');
+
+                        })
+                        .catch(function (error) {
+                            console.error(error);
+                            alert("مشکلی پیش آمده");
+                        });
+                    return;
+                }
+                if (!fullname) {
+                    alert("نام مجموعه الزامی است");
+                    return;
+                }
+            }
+        </script>
+        <script src="/js/jquery.slim.min.js"></script>
+        <script src="/js/bootstrap.min.js"></script>
+        <script defer src="../js/Common.js"></script>
+        <script defer src="../js/landing.js"></script>
+        <script async defer src="https://buttons.github.io/buttons.js"></script>
+    </body>
+</html>

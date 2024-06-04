@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="shortcut icon" href="../images/icons8-videocall-64.png" type="image/x-icon" />
+
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans:400,600" />
+        <link rel="stylesheet" href="../css/landing.css" />
+
+        <script async src="../js/Umami.js"></script>
+        <script src="https://unpkg.com/animejs@3.0.1/lib/anime.min.js"></script>
+        <script src="https://unpkg.com/scrollreveal@4.0.0/dist/scrollreveal.min.js"></script>
+
+        <script src="https://cdn.jsdelivr.net/npm/xss/dist/xss.min.js"></script>
+
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+        <link rel="stylesheet" href="../css/styles.css" />
+        <link rel="stylesheet" href="../css/bootstrap-rtl.css" />
+        <link rel="stylesheet" href="../css/font-awesome.css" />
+        <link rel="stylesheet" href="../css/signin.css" />
+        <title>دیدار | ورود کاربر</title>
+    </head>
+    <body class="rtl">
+        <div class="form-signin" >
+            <h1 class="h3 mb-3 font-weight-normal" style="color: black;">ورود به بخش مدیریت</h1>
+            <label for="inputEmail" class="sr-only">نام کاربری</label>
+            <input
+                type="name"
+                name="email"
+                id="username"
+                class="form-control mb-2"
+                placeholder="نام کاربری"
+                required
+                autofocus
+            />
+            <label for="inputPassword" class="sr-only">کلمه عبور</label>
+            <input
+                type="password"
+                name="password"
+                id="password"
+                class="form-control"
+                placeholder="کلمه عبور"
+                required
+            />
+            <!-- <div class="checkbox mb-3">
+                <label>
+                    <a href="/users/register">اکانت کاربری ندارم/ثبت‌نام</a>
+                </label>
+            </div> -->
+            <div class="form-group">
+            </div>
+            <button id="loginButton" class="btn btn-lg btn-primary btn-block" type="submit">ورود</button>
+        </div>
+        <script>
+            console.log(window.location);
+
+            const usernameInput = document.getElementById('username');
+            const passwordInput = document.getElementById('password');
+            const loginBtn = document.getElementById('loginButton');
+
+            usernameInput.onkeyup = (e) => {
+                if (e.keyCode === 13) {
+                    e.preventDefault();
+                    login();
+                }
+            };
+            passwordInput.onkeyup = (e) => {
+                if (e.keyCode === 13) {
+                    e.preventDefault();
+                    login();
+                }
+            };
+
+            loginBtn.onclick = (e) => {
+                login();
+            };
+
+            function login() {
+                const username = filterXSS(document.getElementById('username').value);
+                const password = filterXSS(document.getElementById('password').value);
+
+                // http://localhost:3010/join/?room=test
+                // http://localhost:3010/join/?room=test&roomPassword=0&name=mirotalksfu&audio=0&video=0&screen=0&notify=0
+                // http://localhost:3010/join/?room=test&roomPassword=0&name=mirotalksfu&audio=0&video=0&screen=0&notify=0&username=username&password=password
+
+                const qs = new URLSearchParams(window.location.search);
+                const room = filterXSS(qs.get('room'));
+
+                // http://localhost:3010/join/test
+                const pathParts = window.location.pathname.split('/');
+                const roomPath = pathParts[pathParts.length - 1];
+
+                if (username && password) {
+                    axios
+                        .post('/login', {
+                            username: username,
+                            password: password,
+                        })
+                        .then(function (response) {
+                            console.log(response);
+
+                            // Store in session
+                            const token = response.data.message.token;
+                            const username = response.data.message.username;
+                            const fullname = response.data.message.fullname;
+                            const user_type = response.data.message.user_type;
+                            window.sessionStorage.peer_token = token;
+                            window.sessionStorage.username = username;
+                            window.sessionStorage.fullname = fullname;
+                            window.sessionStorage.user_type = user_type;
+
+                            // if (room) {
+                            //     return (window.location.href =
+                            //         '/join/' + window.location.search);
+                            //     /*
+                            //     return (window.location.href =
+                            //         '/join/?room=' + room + '&token=' + token); */
+                            // }
+                            // if (roomPath) {
+                            //     return (window.location.href = '/join/' + roomPath);
+                            //     /*
+                            //     return (window.location.href =
+                            //         '/join/?room=' + roomPath + '&token=' + token); */
+                            // }
+                            
+                            // if(user_type == "admin"){
+                            //    return (window.location.href = '/dashboard/admin'); 
+                            // }
+                            // if(user_type == "supervisor"){
+                            //    return (window.location.href = '/dashboard/supervisor'); 
+                            // }
+                            // if(user_type == "normal"){
+                            //    return (window.location.href = '/dashboard/normal'); 
+                            // }
+                            return (window.location.href = '/dashboard');
+                        })
+                        .catch(function (error) {
+                            console.error(error);
+                            alert('Unauthorized');
+                        });
+                    return;
+                }
+                if (!username && !password) {
+                    alert('Username and Password required');
+                    return;
+                }
+                if (!username) {
+                    alert('Username required');
+                    return;
+                }
+                if (!password) {
+                    alert('Password required');
+                    return;
+                }
+            }
+        </script>
+        <script src="../js/jquery.slim.min.js"></script>
+        <script src="../js/bootstrap.min.js"></script>
+        <script defer src="../js/Common.js"></script>
+        <script defer src="../js/landing.js"></script>
+        <script async defer src="https://buttons.github.io/buttons.js"></script>
+    </body>
+</html>

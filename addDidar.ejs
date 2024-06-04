@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="fa">
+    <head>
+        <meta charset="utf-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1, shrink-to-fit=no"
+        />
+        <link rel="shortcut icon" href="../images/icons8-videocall-64.png" type="image/x-icon">
+        <link rel="stylesheet" href="../css/bootstrap-rtl.css" />
+        <link rel="stylesheet" href="../css/font-awesome.css" />
+        <link rel="stylesheet" href="../css/swiper-bundle.min.css">
+        <link rel="stylesheet" href="../css/persian-datepicker.min.css">
+        <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+        <title>دیدار | ساخت جلسه جدید</title>
+        <link href="../css/dashboard.css" rel="stylesheet" />
+        <link rel="stylesheet" href="../css/styles.css" />
+
+        <!-- <script async src="../js/Umami.js"></script> -->
+        <script src="https://cdn.jsdelivr.net/npm/xss/dist/xss.min.js"></script>
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    </head>
+    <body class="rtl">
+        
+        <h3 class="mt-2 text-center">ساخت جلسه جدید</h3>
+<div class=" d-flex align-items-center justify-content-center">
+    <form class="w-50" action="/dashboard/add-didar" method="post">
+        <div class="form-group">
+            <label for="title">عنوان جلسه</label>
+            <input
+                type="text"
+                class="form-control w-50"
+                name="name"
+                id="title"
+                required
+            />
+        </div>
+        
+            <div class="form-group">
+                <label for="title">تاریخ جلسه</label>
+                <input
+                    type="text"
+                    class="form-control w-50 user-datepicker"
+                    name="date"
+                    id="date"
+                />
+            </div>
+        
+
+        <div class="form-group">
+            <label for="title">ساعت جلسه</label>
+            <input
+                type="time"
+                class="form-control w-50"
+                name="time"
+                id="time"
+                
+            />
+        </div>
+        
+
+        <!-- <div class="form-group">
+            <h5>دعوت شدگان</h5>
+
+            <input type="text" name="invited" class="form-control" id="invited" placeholder=" نام کاربری افرادی را که میخواهید دعوت کنید بنویسید. بین نام کاربری ها فاصله بگذارید"></input>
+        </div> -->
+        <div class="form-group">
+            <label for="invited">دعوت کنید</label> <br>
+            <% if(users.length > 0) { %>
+                <% for(let user of users) {%>
+                    <% if(user.username == myUsername) {%>
+                        <% continue }%>
+                    <input type="checkbox"  id="invited" name="invited" value="<%= user.username %>" >
+                    <label class="w-50" for="invited"><%= user.fullname%></label> <br>
+                     
+                <% } %>
+            <% } %>
+        </div>
+
+
+        <div class="row">
+            <button id="didarButton" type="submit" class="btn btn-success m-2" >ساخت جلسه</button>
+            <a href="/dashboard" class="btn btn-warning m-2">انصراف</a>
+        </div>
+        
+    </form>
+</div>
+    <script src="../js/jquery-3.7.1.min.js"></script>
+    <script src="../js/persian-date.min.js"></script>
+    <script src="../js/persian-datepicker.min.js"></script>
+    <script type="text/javascript">
+        $('.user-datepicker').persianDatepicker({
+        observer: true,
+        format: 'YYYY/MM/DD',
+        autoClose: true,
+        // initialValue: true,
+        minDate: 'today',
+        altField: '.user-datepicker-alt'
+    });
+      </script>
+    <script>
+        
+        
+    </script>
+
+
+    <!-- <script>
+        const titleInput = document.getElementById('title');
+        const dateInput = document.getElementById('date');
+        const timeInput = document.getElementById('time');
+        const invitedInput = document.getElementById('invited');
+        const didarBtn = document.getElementById('didarButton');
+
+        titleInput.onkeyup = (e) => {
+            if (e.keyCode === 13) {
+                e.preventDefault();
+                createDidar();
+            }
+        };
+        dateInput.onkeyup = (e) => {
+            if (e.keyCode === 13) {
+                e.preventDefault();
+                createDidar();
+            }
+        };
+        timeInput.onkeyup = (e) => {
+            if (e.keyCode === 13) {
+                e.preventDefault();
+                createDidar();
+            }
+        };
+        invitedInput.onkeyup = (e) => {
+            if (e.keyCode === 13) {
+                e.preventDefault();
+                createDidar();
+            }
+        };
+        didarBtn.onclick = (e) => {
+            createDidar();
+        };
+
+        function createDidar() {
+            const name = filterXSS(document.getElementById('title').value);
+            const date = filterXSS(document.getElementById('date').value);
+            const time = filterXSS(document.getElementById('time').value);
+            const invited = filterXSS(document.getElementsByName('invited').values);
+            // const invitedArr = invited.split(" ");
+            if(name) {
+            axios
+                .post('/dashboard/add-didar', {
+                    name: name,
+                    date: date,
+                    time: time,
+                    invited: invited,
+                    presenter: window.sessionStorage.username
+                })
+                .then(function(response) {
+                    console.log(response);
+
+                    return (window.location.href = '/dashboard');
+                })
+                .catch(function (error) {
+                            console.error(error);
+                            alert('مشکلی پیش آمده');
+                        });
+            return;
+        }
+        else {
+            alert('عنوان جلسه نباید خالی باشد');
+            return;
+        }
+            
+        }
+    </script> -->
+
+    <script src="../js/jquery.slim.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script defer src="../js/Common.js"></script>
+    <script defer src="../js/landing.js"></script>
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+</body>
+</html>
